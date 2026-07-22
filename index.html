@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>FRONTEIRAS — RPG de Mesa</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  html, body { background:#f2e9d8; color:#2a231c; font-family:'Crimson Text', serif; font-size:11pt; line-height:1.5; }
+  p { orphans:3; widows:3; }
+  h1, h2, h3 { break-after:avoid-page; }
+  table.stat, .box, .origem-card { break-inside:avoid-page; }
+
+  @page {
+    size: A4;
+    margin: 20mm 18mm 24mm 18mm;
+    @bottom-center {
+      content: "FRONTEIRAS  •  " counter(page) " / " counter(pages);
+      font-family: 'Oswald Medium', sans-serif;
+      font-size: 8pt;
+      color: #8a7248;
+      letter-spacing: 1.5pt;
+    }
+  }
+  @page cover { margin:0; }
+
+  /* ===== Tipografia base ===== */
+  h1,h2,h3 { font-family:'Cinzel Black','Cinzel',serif; color:#1b2033; }
+  p { margin:0 0 8px 0; text-align:justify; }
+  strong { color:#1b2033; }
+  em { color:#5c5346; }
+
+  /* ===== Capa ===== */
+  .cover { page:cover; position:relative; width:210mm; height:297mm; background:#1b2033;
+    page-break-after:always; overflow:hidden; padding:40px; }
+  .cover-frame { position:absolute; top:50px; left:50px; right:50px; bottom:50px;
+    border:2px solid #a8781f; }
+  .cover-frame::before { content:""; position:absolute; top:8px; left:8px; right:8px; bottom:8px;
+    border:1px solid #6fd9c4; }
+  .cover-hexrow { text-align:center; margin-top:150px; }
+  .cover-hexrow span { display:inline-block; width:10px; height:10px; margin:0 6px;
+    background:#a8781f; transform:rotate(45deg); }
+  .cover-kicker { text-align:center; color:#6fd9c4; font-family:'Oswald SemiBold','Oswald',sans-serif;
+    letter-spacing:8px; font-size:11pt; margin-top:26px; text-transform:uppercase; }
+  .cover-title { text-align:center; color:#e8c873; font-size:76pt; letter-spacing:6px;
+    margin-top:18px; text-shadow: 0 2px 0 #6b4a12; }
+  .cover-subtitle { text-align:center; color:#f2e9d8; font-family:'Oswald Medium','Oswald',sans-serif;
+    font-size:15pt; letter-spacing:2px; margin-top:14px; }
+  .cover-divider { width:220px; height:2px; background:#a8781f; margin:34px auto; position:relative; }
+  .cover-divider::before { content:"•"; position:absolute; top:-11px; left:50%; margin-left:-6px;
+    color:#6fd9c4; font-size:20pt; background:#1b2033; padding:0 6px; }
+  .cover-tagline { text-align:center; color:#c9bc9c; font-family:'Crimson Text',serif; font-style:italic;
+    font-size:13pt; max-width:520px; margin:0 auto; }
+  .cover-footer { position:absolute; bottom:70px; left:0; right:0; text-align:center;
+    color:#7a8199; font-family:'Oswald',sans-serif; font-size:9pt; letter-spacing:2px; }
+
+  /* ===== TOC ===== */
+  .toc-page { page-break-after:always; padding-top:10px; }
+  .toc-title { font-size:26pt; letter-spacing:3px; border-bottom:3px solid #a8781f; padding-bottom:10px; margin-bottom:22px; }
+  table.toc { width:100%; border-collapse:collapse; }
+  table.toc td { padding:7px 4px; font-family:'Oswald Medium','Oswald',sans-serif; font-size:11pt;
+    border-bottom:1px dotted #a8926a; color:#2a231c; }
+  table.toc td.tocnum { width:34px; color:#a8781f; font-family:'Oswald SemiBold','Oswald',sans-serif; }
+  table.toc td.tocpage { width:34px; text-align:right; color:#1f7a6c; font-family:'Oswald SemiBold','Oswald',sans-serif; }
+
+  /* ===== Bandas de capítulo ===== */
+  .chapter-band { page-break-before:always; background:#1b2033; margin:0 -2px 22px -2px;
+    padding:22px 28px; position:relative; }
+  .chapter-band .chnum { color:#6fd9c4; font-family:'Oswald SemiBold','Oswald',sans-serif;
+    letter-spacing:5px; font-size:10.5pt; text-transform:uppercase; }
+  .chapter-band h1 { color:#e8c873; font-size:29pt; letter-spacing:2px; margin-top:4px; }
+  .chapter-band .chsub { color:#c9bc9c; font-family:'Crimson Text',serif; font-style:italic; font-size:11.5pt; margin-top:6px; }
+  .intro-band { background:#1b2033; padding:22px 28px; margin:0 -2px 22px -2px; }
+  .intro-band h1 { color:#e8c873; font-size:26pt; letter-spacing:2px; }
+
+  h2.section { font-size:16pt; color:#1b2033; letter-spacing:0.5px; margin:22px 0 8px 0;
+    border-bottom:2px solid #a8781f; padding-bottom:4px; }
+  h2.section .num { color:#a8781f; margin-right:6px; }
+  h3.subsection { font-size:12.5pt; color:#1f7a6c; letter-spacing:0.5px; margin:14px 0 6px 0;
+    font-family:'Oswald SemiBold','Oswald',sans-serif; text-transform:uppercase; }
+
+  /* ===== Listas ===== */
+  ul.list { list-style:none; padding-left:4px; margin:6px 0 12px 0; }
+  ul.list li { padding-left:16px; position:relative; margin-bottom:5px; text-align:justify; }
+  ul.list li::before { content:"&#9656;"; color:#a8781f; position:absolute; left:0; top:0; }
+  .cols2 { -webkit-column-count:2; column-count:2; -webkit-column-gap:26px; column-gap:26px; }
+
+  /* ===== Tabelas ===== */
+  table.stat { width:100%; border-collapse:collapse; margin:10px 0 16px 0; page-break-inside:avoid; }
+  table.stat th { background:#1b2033; color:#e8c873; font-family:'Oswald SemiBold','Oswald',sans-serif;
+    font-size:9.5pt; text-transform:uppercase; letter-spacing:0.5px; padding:6px 8px; text-align:left; }
+  table.stat td { padding:5px 8px; font-size:10pt; border-bottom:1px solid #d9cba3; }
+  table.stat tr:nth-child(even) td { background:#e9decb; }
+
+  /* ===== Caixas de destaque ===== */
+  .box { border-left:5px solid #a8781f; background:#ece0bf; padding:10px 14px; margin:12px 0;
+    page-break-inside:avoid; }
+  .box-title { font-family:'Oswald SemiBold','Oswald',sans-serif; text-transform:uppercase;
+    letter-spacing:0.5px; font-size:10.5pt; color:#7a5a12; margin-bottom:4px; }
+  .box-teal { border-left-color:#1f7a6c; background:#d9ece6; }
+  .box-teal .box-title { color:#155a50; }
+  .box-purple { border-left-color:#6b4a94; background:#e6dcf0; }
+  .box-purple .box-title { color:#523873; }
+  .box-red { border-left-color:#9c3f34; background:#f0dcd7; }
+  .box-red .box-title { color:#7a2f26; }
+
+  /* ===== Cards de Origem ===== */
+  .origem-card { border:1px solid #a8926a; background:#eee4cd; margin:14px 0; page-break-inside:avoid; }
+  .origem-head { background:#1b2033; color:#e8c873; padding:8px 14px; font-family:'Cinzel Bold','Cinzel',serif;
+    font-size:14pt; letter-spacing:1px; }
+  .origem-body { padding:10px 14px; }
+  .origem-row { margin-bottom:6px; }
+  .origem-row .lbl { font-family:'Oswald SemiBold','Oswald',sans-serif; text-transform:uppercase;
+    font-size:9pt; letter-spacing:0.5px; color:#1f7a6c; display:block; margin-bottom:1px; }
+
+  /* ===== Divisores ===== */
+  .rule-deco { text-align:center; margin:18px 0; color:#a8781f; letter-spacing:14px; font-size:11pt; }
+
+  /* ===== Ficha de personagem ===== */
+  .sheet-block { border:1.5px solid #2a231c; padding:8px 10px; margin-bottom:10px; }
+  .sheet-label { font-family:'Oswald SemiBold','Oswald',sans-serif; font-size:8.5pt; text-transform:uppercase;
+    letter-spacing:0.5px; color:#5c5346; display:block; }
+  table.sheet-grid { width:100%; border-collapse:collapse; }
+  table.sheet-grid td { border:1.5px solid #2a231c; padding:6px; vertical-align:top; width:20%; }
+  .attr-box { text-align:center; }
+  .attr-name { font-family:'Oswald SemiBold','Oswald',sans-serif; font-size:9pt; text-transform:uppercase; letter-spacing:1px; }
+  .attr-num { border:1px solid #2a231c; border-radius:4px; width:44px; height:36px; margin:6px auto 0 auto; }
+  .pip-row { margin-top:4px; }
+  .pip { display:inline-block; width:13px; height:13px; border:1.5px solid #2a231c; border-radius:50%; margin-right:4px; }
+  .fillbox { border-bottom:1px solid #5c5346; min-height:16px; margin-bottom:3px; }
+  .skill-line { display:table; width:100%; padding:2px 0; border-bottom:1px dotted #a8926a; }
+  .skill-line .sn { display:table-cell; font-size:9.5pt; }
+  .skill-line .sp { display:table-cell; text-align:right; width:90px; }
+
+  .final-note { text-align:center; padding-top:120px; }
+  .final-note .fn-title { font-size:20pt; letter-spacing:3px; }
+  .final-note p { text-align:center; max-width:480px; margin:10px auto; color:#5c5346; font-size:10pt; }
+</style>
+</head>
+<body>
+
+<!-- ================= CAPA ================= -->
+<div class="cover">
+  <div class="cover-frame"></div>
+  <div class="cover-hexrow"><span></span><span></span><span></span></div>
+  <div class="cover-kicker">Um RPG de Mesa</div>
+  <div class="cover-title">FRONTEIRAS</div>
+  <div class="cover-subtitle">PROGRESSO, RUÍNA E O QUE HÁ ENTRE OS DOIS</div>
+  <div class="cover-divider"></div>
+  <p class="cover-tagline">Um sistema baseado em d20, inspirado no universo de Arcane — sobre pessoas presas
+  entre a cidade que brilha e a cidade que a sustenta por baixo.</p>
+  <div class="cover-footer">SISTEMA ORIGINAL &nbsp;&#9670;&nbsp; VERSÃO 1.0</div>
+</div>
+
+<!-- ================= SUMÁRIO ================= -->
+<div class="toc-page">
+  <div class="toc-title">Sumário</div>
+  <table class="toc">
+    <tr><td class="tocnum">—</td><td>Introdução</td><td class="tocpage">TOC_INTRO</td></tr>
+    <tr><td class="tocnum">01</td><td>Núcleo do Sistema</td><td class="tocpage">TOC_C1</td></tr>
+    <tr><td class="tocnum">02</td><td>Criando um Personagem</td><td class="tocpage">TOC_C2</td></tr>
+    <tr><td class="tocnum">03</td><td>Perícias</td><td class="tocpage">TOC_C3</td></tr>
+    <tr><td class="tocnum">04</td><td>Origens</td><td class="tocpage">TOC_C4</td></tr>
+    <tr><td class="tocnum">05</td><td>Recursos Especiais — Fluxo &amp; Shimmer</td><td class="tocpage">TOC_C5</td></tr>
+    <tr><td class="tocnum">06</td><td>Combate</td><td class="tocpage">TOC_C6</td></tr>
+    <tr><td class="tocnum">07</td><td>Itens &amp; Equipamentos</td><td class="tocpage">TOC_C7</td></tr>
+    <tr><td class="tocnum">08</td><td>Progressão — Marcas</td><td class="tocpage">TOC_C8</td></tr>
+    <tr><td class="tocnum">09</td><td>Guia do Mestre</td><td class="tocpage">TOC_C9</td></tr>
+    <tr><td class="tocnum">—</td><td>Ficha de Personagem</td><td class="tocpage">TOC_SHEET</td></tr>
+  </table>
+</div>
+
+<!-- ================= INTRODUÇÃO ================= -->
+<div class="intro-band"><h1>Introdução</h1></div>
+
+<p><strong>Fronteiras</strong> é um RPG de mesa sobre pessoas comuns presas entre dois mundos: a cidade do
+progresso, erguida em bronze e luz hextech, e a cidade que a sustenta por baixo, abandonada à própria sorte.
+É um jogo sobre ambição, invenção descontrolada, sobrevivência e o preço que cada personagem paga por escolher
+um lado — ou por tentar não escolher nenhum.</p>
+
+<h3 class="subsection">Tom e Temas</h3>
+<ul class="list">
+  <li>Desigualdade entre quem vive na luz e quem vive na sombra que a sustenta.</li>
+  <li>O preço da inovação: toda tecnologia nova resolve um problema e cria outro.</li>
+  <li>Vício e sobrevivência — nem toda escolha difícil tem uma opção limpa.</li>
+  <li>Lealdade, família e o que fazemos quando o sistema não foi feito pra nos proteger.</li>
+</ul>
+
+<h3 class="subsection">O que você precisa pra jogar</h3>
+<ul class="list">
+  <li>Este livro, papel e caneta para cada jogador.</li>
+  <li>Pelo menos dois dados de 20 lados (d20) por jogador — alguns testes pedem para rolar dois de uma vez.</li>
+  <li>Um mestre disposto a dizer sim quando puder e a complicar as coisas quando for interessante.</li>
+</ul>
+
+<div class="rule-deco">&#9670; &#9670; &#9670;</div>
+
+<!-- ================= CAPÍTULO 1 ================= -->
+<div class="chapter-band">
+  <div class="chnum">Capítulo 01</div>
+  <h1>Núcleo do Sistema</h1>
+  <div class="chsub">Toda a mecânica de Fronteiras nasce de uma única pergunta: você consegue, sob pressão?</div>
+</div>
+
+<h2 class="section"><span class="num">1.1</span>Teste de Ação</h2>
+<p>Sempre que um personagem tenta algo com chance real de falhar, role:</p>
+<div class="box"><div class="box-title">Fórmula do Teste</div>
+1d20 + Atributo + Perícia (se aplicável) &nbsp;vs.&nbsp; Nível de Dificuldade (ND)</div>
+
+<p>Se o resultado igualar ou superar o ND, o personagem consegue. O quanto o resultado ultrapassa o ND
+determina a qualidade do sucesso — veja <strong>Margem de Sucesso</strong> abaixo.</p>
+
+<h3 class="subsection">Nível de Dificuldade (ND)</h3>
+<table class="stat">
+<tr><th>ND</th><th>Dificuldade</th><th>Exemplo</th></tr>
+<tr><td>8</td><td>Rotineiro</td><td>Abrir uma porta destrancada com pressa</td></tr>
+<tr><td>12</td><td>Simples</td><td>Escalar uma cerca baixa, seguir um rastro fresco</td></tr>
+<tr><td>16</td><td>Complicado</td><td>Arrombar uma fechadura de qualidade, notar uma mentira bem contada</td></tr>
+<tr><td>20</td><td>Difícil</td><td>Desarmar uma armadilha hextech, negociar com alguém hostil</td></tr>
+<tr><td>24</td><td>Extremo</td><td>Estabilizar um núcleo hextech instável em segundos</td></tr>
+<tr><td>28+</td><td>Lendário</td><td>Feitos que a cidade vai lembrar por anos</td></tr>
+</table>
+
+<h3 class="subsection">Margem de Sucesso</h3>
+<ul class="list">
+  <li><strong>Sucesso simples:</strong> igualou ou superou o ND em até 4 pontos. Funciona, sem extras.</li>
+  <li><strong>Sucesso pleno</strong> (5+ acima do ND): além de funcionar, gera um pequeno efeito extra —
+  economia de tempo, uma informação a mais, uma vantagem posicional.</li>
+  <li><strong>Sucesso perfeito</strong> (10+ acima do ND, ou 20 natural): o efeito extra é maior, e o mestre
+  pode permitir recuperar 1 ponto de um recurso gasto na cena.</li>
+  <li><strong>Falha:</strong> não funciona. O jogador ainda descreve como tentou.</li>
+  <li><strong>Falha grave</strong> (5+ abaixo do ND, ou 1 natural): além de não funcionar, gera uma complicação
+  — o mestre introduz algo que piora a situação.</li>
+</ul>
+
+<h3 class="subsection">Vantagem e Desvantagem</h3>
+<p>Quando a situação favorece claramente o personagem (boa posição, ferramenta certa, ajuda de um aliado),
+role <strong>2d20 e use o maior</strong>. Quando o atrapalha (escuridão, pressa, um Ferimento Grave ativo),
+role <strong>2d20 e use o menor</strong>. As duas nunca se acumulam — se as condições dariam os dois, elas se
+cancelam e o teste é normal.</p>
+
+<h3 class="subsection">Testes Opostos e Ajuda</h3>
+<p>Quando dois personagens competem diretamente (convencer vs. perceber a mentira, por exemplo), ambos rolam
+e o maior resultado vence; em empate, quem está se defendendo ou reagindo leva vantagem. Um aliado pode
+gastar sua ação para <strong>Ajudar</strong>, concedendo Vantagem ao teste principal — apenas um ajudante
+conta por teste.</p>
+
+<h3 class="subsection">Graus de Perícia</h3>
+<table class="stat">
+<tr><th>Grau</th><th>Bônus</th><th>Significado</th></tr>
+<tr><td>Destreinado</td><td>+0</td><td>Sem preparo formal — pode até tentar, mas na sorte</td></tr>
+<tr><td>Treinado</td><td>+2</td><td>Sabe o básico e aplica bem sob pressão</td></tr>
+<tr><td>Veterano</td><td>+4</td><td>Anos de prática — referência entre os pares</td></tr>
+<tr><td>Mestre</td><td>+6</td><td>Um dos melhores da cidade nisso</td></tr>
+</table>
+
+<!-- ================= CAPÍTULO 2 ================= -->
+<div class="chapter-band">
+  <div class="chnum">Capítulo 02</div>
+  <h1>Criando um Personagem</h1>
+  <div class="chsub">Cinco atributos, uma origem, e a pergunta: o que você fez pra chegar até aqui?</div>
+</div>
+
+<h2 class="section"><span class="num">2.1</span>Atributos</h2>
+<p>Cada personagem tem cinco atributos, variando normalmente de -1 a +4:</p>
+
+<table class="stat">
+<tr><th>Atributo</th><th>Representa</th><th>Usado em</th></tr>
+<tr><td><strong>Punho</strong></td><td>Força física, resistência bruta</td><td>Combate corpo a corpo, arrombar, aguentar dano</td></tr>
+<tr><td><strong>Reflexo</strong></td><td>Agilidade, reação, precisão motora</td><td>Esquiva, pontaria, furtividade, acrobacia</td></tr>
+<tr><td><strong>Engenho</strong></td><td>Intelecto, ciência, hextech</td><td>Construir, investigar, entender o que ninguém mais entende</td></tr>
+<tr><td><strong>Fibra</strong></td><td>Resistência mental e física a extremos</td><td>Resistir à dor, ao medo, ao Shimmer, à exaustão</td></tr>
+<tr><td><strong>Verve</strong></td><td>Carisma, presença, manha social</td><td>Negociar, intimidar, mentir, cativar</td></tr>
+</table>
+
+<div class="box"><div class="box-title">Distribuindo os pontos</div>
+Distribua os valores <strong>+3, +2, +1, +1, 0</strong> entre os cinco atributos, um valor em cada.
+Nenhum atributo começa acima de +3 na criação — o +4 é reservado para a evolução do personagem.</div>
+
+<h2 class="section"><span class="num">2.2</span>Passo a Passo</h2>
+<ul class="list">
+  <li><strong>1. Escolha uma Origem</strong> (Capítulo 04) — ela define de onde você vem.</li>
+  <li><strong>2. Distribua os Atributos</strong> — use o array acima.</li>
+  <li><strong>3. Marque as Perícias</strong> — a perícia bônus da Origem, mais duas à sua escolha como Treinada.</li>
+  <li><strong>4. Calcule os Recursos</strong> — Pontos de Vida, Fluxo e Defesa (veja fórmulas nos Capítulos 05 e 06).</li>
+  <li><strong>5. Escreva seu Vínculo</strong> — a pergunta pessoal que a Origem deixa em aberto.</li>
+  <li><strong>6. Escolha o Equipamento inicial</strong> — o item da Origem, mais uma arma simples e um item geral (Capítulo 07).</li>
+</ul>
+
+<!-- ================= CAPÍTULO 3 ================= -->
+<div class="chapter-band">
+  <div class="chnum">Capítulo 03</div>
+  <h1>Perícias</h1>
+  <div class="chsub">O que seu personagem sabe fazer bem — e o atributo que costuma acompanhar cada uma.</div>
+</div>
+
+<div class="cols2">
+<p><strong>Combate</strong> <em>(Punho)</em> — lutar corpo a corpo, com ou sem arma.</p>
+<p><strong>Pontaria</strong> <em>(Reflexo)</em> — armas à distância e hextech ofensivo.</p>
+<p><strong>Furtividade</strong> <em>(Reflexo)</em> — mover-se sem ser notado, esconder-se.</p>
+<p><strong>Acrobacia</strong> <em>(Reflexo)</em> — escalar, saltar, equilibrar-se.</p>
+<p><strong>Hextech</strong> <em>(Engenho)</em> — construir, consertar e entender tecnologia hextech.</p>
+<p><strong>Alquimia</strong> <em>(Engenho)</em> — venenos, misturas, Shimmer e química de Zaun.</p>
+<p><strong>Investigação</strong> <em>(Engenho)</em> — juntar pistas, deduzir, pesquisar.</p>
+<p><strong>Medicina</strong> <em>(Engenho)</em> — primeiros socorros, tratar ferimentos e o Vício.</p>
+<p><strong>Diplomacia</strong> <em>(Verve)</em> — negociar e persuadir.</p>
+<p><strong>Intimidação</strong> <em>(Verve)</em> — ameaçar, impor respeito.</p>
+<p><strong>Enganação</strong> <em>(Verve)</em> — mentir, blefar, disfarçar-se.</p>
+<p><strong>Performance</strong> <em>(Verve)</em> — atuar, cativar uma plateia.</p>
+<p><strong>Sobrevivência</strong> <em>(Fibra)</em> — orientar-se, rastrear, resistir a condições adversas.</p>
+<p><strong>Prontidão</strong> <em>(Fibra)</em> — perceber perigo, reagir a emboscadas; base da iniciativa.</p>
+</div>
+
+<p style="margin-top:10px;">Qualquer perícia pode, a critério do mestre, ser testada com um atributo diferente
+do indicado quando a situação pedir — <em>Combate</em> com Reflexo numa luta de esquivas, por exemplo.
+A combinação listada é a mais comum, não uma regra fechada.</p>
+
+<!-- ================= CAPÍTULO 4 ================= -->
+<div class="chapter-band">
+  <div class="chnum">Capítulo 04</div>
+  <h1>Origens</h1>
+  <div class="chsub">De onde você vem molda o que você sabe fazer — e o que ainda te prende ao passado.</div>
+</div>
+
+<p>Cada Origem concede uma <strong>perícia bônus</strong> (automaticamente Treinada), um <strong>Traço Único</strong>,
+um <strong>item inicial</strong> e um <strong>Vínculo</strong> — uma pergunta em aberto que o jogador responde
+e o mestre pode usar como gancho de história.</p>
+
+<div class="origem-card">
+  <div class="origem-head">Elite de Piltover</div>
+  <div class="origem-body">
+  <p>Nascido entre conselheiros e patronos da cidade do progresso — você cresceu com acesso, educação e expectativas.</p>
+  <div class="origem-row"><span class="lbl">Perícia bônus</span>Diplomacia</div>
+  <div class="origem-row"><span class="lbl">Traço único — Rede de Contatos</span>Uma vez por sessão, você
+  conhece alguém em posição de poder que pode te dar uma informação ou um favor pequeno.</div>
+  <div class="origem-row"><span class="lbl">Item inicial</span>Carta de recomendação de uma casa nobre</div>
+  <div class="origem-row"><span class="lbl">Vínculo</span>Alguém da sua família não aprova o caminho que você escolheu. Quem é, e por quê?</div>
+  </div>
+</div>
+
+<div class="origem-card">
+  <div class="origem-head">Acadêmico(a) Hextech</div>
+  <div class="origem-body">
+  <p>Você estudou — ou ainda estuda — obcecado(a) pelo potencial e pelo perigo do Hextech.</p>
+  <div class="origem-row"><span class="lbl">Perícia bônus</span>Hextech</div>
+  <div class="origem-row"><span class="lbl">Traço único — Solução Improvisada</span>Uma vez por sessão, gaste
+  2 Fluxo para criar um efeito hextech temporário fora da lista de itens, sujeito à aprovação do mestre.</div>
+  <div class="origem-row"><span class="lbl">Item inicial</span>Kit de ferramentas hextech portátil</div>
+  <div class="origem-row"><span class="lbl">Vínculo</span>Um professor ou colega vê grande potencial em você — ou grande perigo. Quem, e o que ele viu?</div>
+  </div>
+</div>
+
+<div class="origem-card">
+  <div class="origem-head">Enforcer</div>
+  <div class="origem-body">
+  <p>Você usa o distintivo para manter — ou impor — a ordem nas ruas de Piltover, e às vezes desce a Zaun pra isso.</p>
+  <div class="origem-row"><span class="lbl">Perícia bônus</span>Investigação</div>
+  <div class="origem-row"><span class="lbl">Traço único — Autoridade</span>Ao se identificar como Enforcer,
+  NPCs de Piltover cooperam mais facilmente. Não garante nada com zaunitas — e pode até piorar.</div>
+  <div class="origem-row"><span class="lbl">Item inicial</span>Distintivo, algemas e pistola regulamentada</div>
+  <div class="origem-row"><span class="lbl">Vínculo</span>Você já teve que escolher entre a lei e o que era certo. Nem sempre escolheu a lei — quando foi essa vez?</div>
+  </div>
+</div>
+
+<div class="origem-card">
+  <div class="origem-head">Zaunita do Subterrâneo</div>
+  <div class="origem-body">
+  <p>Você nasceu e cresceu na Zaun, e aprendeu cedo que ninguém vem te salvar.</p>
+  <div class="origem-row"><span class="lbl">Perícia bônus</span>Furtividade</div>
+  <div class="origem-row"><span class="lbl">Traço único — A Rua Conhece a Rua</span>Vantagem em testes para se
+  orientar, se esconder ou conseguir informação nos becos e vielas da cidade baixa.</div>
+  <div class="origem-row"><span class="lbl">Item inicial</span>Faca improvisada</div>
+  <div class="origem-row"><span class="lbl">Vínculo</span>Alguém que você ama ainda está preso lá embaixo. Quem é essa pessoa?</div>
+  </div>
+</div>
+
+<div class="origem-card">
+  <div class="origem-head">Firelight</div>
+  <div class="origem-body">
+  <p>Parte de uma rede clandestina que protege quem a cidade esqueceu, usando sombra e solidariedade como armas.</p>
+  <div class="origem-row"><span class="lbl">Perícia bônus</span>Acrobacia</div>
+  <div class="origem-row"><span class="lbl">Traço único — Vantagem da Sombra</span>Ao atacar a partir de
+  furtividade ou emboscada, adicione +1d6 ao dano.</div>
+  <div class="origem-row"><span class="lbl">Item inicial</span>Corda com gancho e disfarce simples</div>
+  <div class="origem-row"><span class="lbl">Vínculo</span>Você respondeu a um chamado do grupo e ainda não contou
+  a alguém próximo o que isso custou. O que foi, e pra quem você escondeu?</div>
+  </div>
+</div>
+
+<div class="origem-card">
+  <div class="origem-head">Submundo do Crime (Chembarão)</div>
+  <div class="origem-body">
+  <p>Você trabalha para — ou dirige — uma operação que lucra com o vício e a necessidade alheia: Shimmer, contrabando, proteção.</p>
+  <div class="origem-row"><span class="lbl">Perícia bônus</span>Intimidação</div>
+  <div class="origem-row"><span class="lbl">Traço único — Rede de Favores</span>Pode pedir um favor perigoso a
+  alguém do submundo; será concedido, mas com um preço definido pelo mestre.</div>
+  <div class="origem-row"><span class="lbl">Item inicial</span>Uma dose de Shimmer refinado</div>
+  <div class="origem-row"><span class="lbl">Vínculo</span>Alguém te deve a vida — ou você deve a vida de alguém a outra pessoa. Quem, e o que isso ainda custa?</div>
+  </div>
+</div>
+
+<div class="origem-card">
+  <div class="origem-head">Cientista Renegado(a)</div>
+  <div class="origem-body">
+  <p>Suas pesquisas foram longe demais para os padrões da Academia — ou você nunca teve padrões pra seguir.</p>
+  <div class="origem-row"><span class="lbl">Perícia bônus</span>Alquimia</div>
+  <div class="origem-row"><span class="lbl">Traço único — Experimento Pessoal</span>Escolha um Ferimento Grave
+  permanente que já é parte de você, resultado de uma experiência anterior; ele não penaliza normalmente, mas o
+  mestre pode complicá-lo em momentos narrativamente relevantes.</div>
+  <div class="origem-row"><span class="lbl">Item inicial</span>Amostras instáveis e um caderno cifrado</div>
+  <div class="origem-row"><span class="lbl">Vínculo</span>Alguém — ou alguma instituição — quer muito recuperar
+  o que você levou quando fugiu do laboratório. O que é, e quem quer de volta?</div>
+  </div>
+</div>
+
+</body>
+</html>
